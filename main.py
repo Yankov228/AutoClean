@@ -1,20 +1,32 @@
 import easyocr
 import cv2
-from matplotlib import pyplot as plt
+from pathlib import Path
 
-IMAGE_PATH = 'surf.jpg'
+def is_number(text):
+    return text.replace('.', '', 1).isdigit()
+
+def Detections(image_path, reader):
+    img = cv2.imread(str(image_path))
+    results = reader.readtext(str(image_path))
+    for detection in results:
+        box = detection[0]
+        text = detection[1]
+
+        top_left = tuple(map(int, box[0]))
+        bottom_right = tuple(map(int, box[2]))
+
+        if not is_number(text):
+            cv2.rectangle(img, top_left, bottom_right, (255, 255, 255), -1)
+
+    return img
+
 reader = easyocr.Reader(['en'])
-result = reader.readtext(IMAGE_PATH)
-font = cv2.FONT_HERSHEY_SIMPLEX
-img = cv2.imread(IMAGE_PATH)
-spacer = 100
-for detection in result: 
-    top_left = tuple(detection[0][0])
-    bottom_right = tuple(detection[0][2])
-    text = detection[1]
-    img = cv2.rectangle(img,top_left,bottom_right,(0,255,0),3)
-    img = cv2.putText(img,text,(20,spacer), font, 0.5,(0,255,0),2,cv2.LINE_AA)
-    spacer+=15
-    
-plt.imshow(img)
-plt.show()
+input_folder = Path('Input')
+output_folder = Path('Output')
+output_folder.mkdir(exist_ok=True)
+
+images = sorted([f for f in input_folder.iterdir() if f.is_file() and f.suffix.lower() in ['.jpg', '.png']])
+for img_path in images:
+    processed_img = Detections(img_path, reader)
+    out_path = output_folder / f"{img_path.stem}_out.jpg"
+    cv2.imwrite(str(out_path), processed_img)
