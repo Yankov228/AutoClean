@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Editing{% endblock %}
+
+{% block content %}
+  {% for path_str in pictures %}
+    <div class="editedPicture" id="page-{{ loop.index }}">
+      <img src="{{ url_for('static', filename=path_str) }}" alt="Page {{ loop.index }}">
+    </div>
+  {% endfor %}
+
+
+
+  
+{% endblock %}
