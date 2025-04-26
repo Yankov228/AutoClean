@@ -28,11 +28,11 @@ def home():
         saved_data = True
 
     return render_template("home.html", pages=pages)
-
+# Returns user to home page if they refresh site
 @views.route('/page/<int:page_id>')
 def page(page_id):
     return redirect(url_for('views.home'))
-
+# Erases "cluster" from "pages" and from image
 @views.route('/erase_cluster', methods=['POST'])
 def erase_cluster():
     global pages
@@ -62,7 +62,7 @@ def erase_cluster():
                 })
 
     return jsonify({'status': 'error'})
-
+# Saves images to "Output" folder
 @views.route('/submit_changes', methods=['POST'])
 def submit_changes():
 
@@ -80,7 +80,7 @@ def submit_changes():
     return jsonify({
         'status': 'success'
     })
-    
+# Clears /static folder from all .jpg files
 @views.route('/clearing_static', methods=['DELETE'])
 def clearing_static():
     from pathlib import Path

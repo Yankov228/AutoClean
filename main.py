@@ -6,7 +6,7 @@ app = create_app()
 
 if __name__ == '__main__':
     
-    print('\033[31mWait while the images are processed (it may take several minutes depending on the number of images)\033[0m')
+    print('\033[31mWait while the images are being processed (it may take several minutes depending on the number of images)\033[0m')
     
     log = logging.getLogger('werkzeug')
     log.setLevel(logging.ERROR)
@@ -14,6 +14,13 @@ if __name__ == '__main__':
     input_folder = Path('Input')
     output_folder = Path('website/static/')
     output_folder.mkdir(exist_ok=True)
+    
+    # Set language of images in "Input", default value - english
+    # English               en
+    # Simplified Chinese	ch_sim
+    # Traditional Chinese	ch_tra
+    # Japanese	            ja
+    # Korean                ko
 
     language = 'en'
 

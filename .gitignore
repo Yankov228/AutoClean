@@ -1,4 +1,7 @@
-Input
-Output
-website/static/
 website/__pycache__/
+Input/*
+!Input/.gitkeep
+Output/*
+!Output/.gitkeep
+website/static/*
+!website/static/.gitkeep

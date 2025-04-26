@@ -17,7 +17,7 @@ def create_app():
     app.register_blueprint(views, url_prefix='/')
     
     return app
-
+# Reads files from "Input", lets easyocr read them, paints words with white and saves images to /static
 def image_processing(input_folder, output_folder, lang):
 
     if lang:
@@ -39,7 +39,7 @@ def image_processing(input_folder, output_folder, lang):
             'source': str(copy_path.name)
         }
         cv2.imwrite(str(out_path_for_cv2), processed_img)
-
+# Paints words with white and numbers them if needed
 def image_altering(img, clusters, boxes, with_numbering):
     for cluster_index, cluster in enumerate(clusters):
         for idx in cluster:
@@ -62,7 +62,7 @@ def image_altering(img, clusters, boxes, with_numbering):
                     cv2.LINE_AA
                 )
     return img, clusters, boxes
-
+# Detects clusters (if the rectangles delineating the words intersect - merges them into a cluster)
 def cluster_detection(polygons, boxes, img):
     n = len(polygons)
 
@@ -91,7 +91,7 @@ def cluster_detection(polygons, boxes, img):
                 clusters.append(cluster)
 
     return image_altering(img, clusters, boxes, with_numbering=True)
-
+# Reads image, detecting words and creating rectangles around them
 def text_recognition(image_path, reader):
 
     result = reader.readtext(image_path)
