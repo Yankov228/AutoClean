@@ -3,13 +3,35 @@
 {% block title %}Editing{% endblock %}
 
 {% block content %}
-  {% for path_str in pictures %}
-    <div class="editedPicture" id="page-{{ loop.index }}">
-      <img src="{{ url_for('static', filename=path_str) }}" alt="Page {{ loop.index }}">
+  {% for page in pages %}
+    <div class="editedPicture" id="page-{{ loop.index }}" data-page="{{ loop.index }}"
+        data-clusters='{{ {"clusters": page.clusters, "boxes": page.boxes} | tojson | safe }}'>
+        <img src="{{ url_for('static', filename=page.source) }}" alt="Source {{ loop.index }}">      
+        <img id="page-img-{{ loop.index }}" src="{{ url_for('static', filename=page.path) }}" alt="Page {{ loop.index }}">
     </div>
   {% endfor %}
-
-
-
   
+  <button type="button" class="submit_btn btn btn-dark" onclick="submit_changes()">Submit changes</button>
+
+  <div class="offcanvas offcanvas-end show" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Select the change number you want to cancel</h5>
+    </div>
+    <div class="offcanvas-body" id="offcanvasContent">
+
+    </div>
+    <h6>If you satisfied with changes, scroll to bottom of this page to save them</h6>
+  </div>
+  
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <strong class="me-auto">Your pictures have been saved!</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body">
+        Your images are now safe, you can exit this page and check your "Output" folder.
+      </div>
+    </div>
+  </div>
 {% endblock %}
